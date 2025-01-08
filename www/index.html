@@ -1,0 +1,129 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *">
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.3.1.min.css" />
+
+    <title>The Letters of 1916</title>
+    
+</head>
+<body onload="javascript:initGeolocation()">
+
+    <div data-role = "page">
+    <main>
+    <header>
+    </header>
+    <section id = "data"></section>        
+    </main>    
+<script type="text/javascript">
+
+    function initGeolocation() {
+ if (navigator && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        } else {
+            alert('Geolocation is not supported');
+        }
+}
+
+function onError() {}
+
+function onSuccess(position) {
+      var myLat = position.coords.latitude;
+                var myLng = position.coords.longitude;
+                var origin = '"Longitude":' + position.coords.longitude + "," + '"Latitude":' + position.coords.latitude;
+                //alert(origin);
+                var origin = '{' + origin + '}';
+                var origin = $.parseJSON(origin);
+           
+        // letters to sort
+    
+var xhReq = new XMLHttpRequest();
+xhReq.open("GET", "http://localhost:8888/letters1916AppDEV/www/data/result.json", false);
+xhReq.send(null);
+var letters = JSON.parse(xhReq.responseText);
+console.log(letters);
+                
+    
+
+	// loop through each letter and calculate its distance
+
+	var array = [];
+	for (var name in letters) {
+	    var letter = letters[name];
+	    array.push({
+	        letterName: name,
+            title: letter.Detail.Title,
+            address: letter.Detail.Location,
+	        distance: calculateDistance(position.coords.longitude, position.coords.latitude, letter.Position.Longitude, letter.Position.Latitude),
+            everything: letter.Detail.Title + '<br>' + letter.Detail.Location + '<br>' + '<a href = ' + name + '>'+ 'Click here to view letter'+'</a>' + '<br>'
+ 			
+	    });
+	
+	}
+
+	// this calculates distance
+	function calculateDistance(myLongitude, myLatitude, long1, lat1) {
+        erdRadius = 6371;
+
+        myLongitude = myLongitude * (Math.PI / 180);
+        myLatitude = myLatitude * (Math.PI / 180);
+        long1 = long1 * (Math.PI / 180);
+        lat1 = lat1 * (Math.PI / 180);
+
+        x0 = myLongitude * erdRadius * Math.cos(myLatitude);
+        y0 = myLatitude * erdRadius;
+
+        x1 = long1 * erdRadius * Math.cos(lat1);
+        y1 = lat1 * erdRadius;
+
+        dx = x0 - x1;
+        dy = y0 - y1;
+
+        d = Math.sqrt((dx * dx) + (dy * dy));
+        return Math.round(d * 1000);
+}
+
+	// finaly, sort the letters according to their distance
+	array.sort(function (a, b) {
+	    return parseInt(a.distance) - parseInt(b.distance)
+    });
+	
+
+    for (i = 0; i < 10; i++) 
+{
+    var newCard = $('<section class = "card" />').html(array[i].everything);
+    $('#data').append(newCard);
+  
+
+}
+    
+    var dataAndCards = $("#data");
+    $("div").append(dataAndCards);
+    
+    }
+
+
+    //onError Callback receives a PositionError object
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+
+    </script>
+    
+
+    <script type="text/javascript" src="phonegap.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    
+</div>
+</body>
+
+</html>

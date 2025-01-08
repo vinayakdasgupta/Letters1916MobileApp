@@ -1,0 +1,156 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *">
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.3.1.min.css" />
+
+    <title>Letters 1916</title>
+    
+</head>
+<body>
+
+    <div data-role = "page">
+    <main>
+    <header>
+    </header>
+    <section class="card" id = "data"></section>        
+    </main> 
+
+<script>
+    /*
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+    alert("navigator.geolocation works well");
+    alert(navigator.geolocation.getCurrentPosition);
+    }
+    */
+    
+     
+    
+     $(function(){
+                if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+                    // Wait for the device to be ready to grab the geoloc
+                    // Helps avoid the unsightly iOS authorization message
+                    // http://stackoverflow.com/questions/1673579/location-permission-alert-on-iphone-with-phonegap 
+                    document.addEventListener("deviceready", onDeviceReady, false);
+         
+                    
+    
+                } else {
+                    onDeviceReady(); //this is the browser
+            
+         
+                }
+         
+           
+            
+            })
+     
+            
+
+            
+            function onDeviceReady() {
+                var options = { enableHighAccuracy: true };
+                navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+
+             
+            }
+        
+            function onSuccess(position) {
+                var myLat = position.coords.latitude;
+                var myLng = position.coords.longitude;
+                var origin = '"Longitude":' + position.coords.longitude + "," + '"Latitude":' + position.coords.latitude;
+                var origin = '{' + origin + '}'
+                alert(myLat);
+                alert(myLng);
+                alert(origin);
+                var origin = $.parseJSON(origin);
+                //console.log(origin);
+               
+                
+                
+             
+                
+                	// letters to sort
+	var cities = JSON.parse('{"1925": {"Position":{"Longitude":-6.250532199999999,"Latitude":53.3585286}},"1927": {"Position":{"Longitude":-8.6235841,"Latitude":52.6627726}},"1431": {"Position":{"Longitude":-6.2596153,"Latitude":53.3366055}},"309": {"Position":{"Longitude":-0.509456,"Latitude":51.386491}},"1181": {"Position":{"Longitude":-6.2674284,"Latitude":53.34288609999999}},"1204": {"Position":{"Longitude":-6.2603097,"Latitude":53.3498053}},"1795": {"Position":{"Longitude":-6.2674284,"Latitude":53.34288609999999}},"409": {"Position":{"Longitude":-6.2674284,"Latitude":53.34288609999999}},"424": {"Position":{"Longitude":-6.2674284,"Latitude":53.34288609999999}},"425": {"Position":{"Longitude":-6.2674284,"Latitude":53.34288609999999}},"1918": {"Position":{"Longitude":-6.2603097,"Latitude":53.3498053}},"304": {"Position":{"Longitude":-6.2603097,"Latitude":53.3498053}},"2542": {"Position":{"Longitude":-6.2603097,"Latitude":53.3498053}},"238": {"Position":{"Longitude":-9.0567905,"Latitude":53.270668}},"1078": {"Position":{"Longitude":-6.151904,"Latitude":53.2893949}},"2446": {"Position":{"Longitude":-6.5661301,"Latitude":52.5021968}},"334": {"Position":{"Longitude":-6.9095683,"Latitude":53.1589342}},"305": {"Position":{"Longitude":-0.1277583,"Latitude":51.5073509}},"1063": {"Position":{"Longitude":-6.3344998,"Latitude":53.3578178}},"2407": {"Position":{"Longitude":-6.2838544,"Latitude":53.3004978}}}');
+                
+                //console.log(cities);
+
+	// loop through each city and calculate its distance
+
+	var array = [];
+	for (var name in cities) {
+	    var city = cities[name];
+	    array.push({
+	        cityName: name,
+	        distance: calculateDistance(origin, city.Position)
+			
+	    });
+
+		
+	}
+	
+	
+
+	// this is the function you provided (slightly modified)
+	function calculateDistance(p1, p2) {
+	    var erdRadius = 6371;
+
+	    p1.Longitude = p1.Longitude * (Math.PI / 180);
+	    p1.Latitude = p1.Latitude * (Math.PI / 180);
+	    p2.Longitude = p2.Longitude * (Math.PI / 180);
+	    p2.Latitude = p2.Latitude * (Math.PI / 180);
+
+	    var x0 = p1.Longitude * erdRadius * Math.cos(p1.Latitude);
+	    var y0 = p1.Latitude * erdRadius;
+
+	    var x1 = p2.Longitude * erdRadius * Math.cos(p2.Latitude);
+	    var y1 = p2.Latitude * erdRadius;
+
+	    var dx = x0 - x1;
+	    var dy = y0 - y1;
+
+	    return Math.sqrt((dx * dx) + (dy * dy));
+	}
+
+	// finaly, sort the cities according to their distance
+	array.sort(function (a, b) {
+	    return a.distance - b.distance;
+		
+	
+	});
+	
+
+    for (i = 0; i < 10; i++) 
+{
+  $('<section class = "card" />').text(document.getElementById('data').innerHTML = array[i].cityName).appendTo('div');
+
+
+}
+    }
+
+
+    //onError Callback receives a PositionError object
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+
+    </script>
+    
+
+    <script type="text/javascript" src="phonegap.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <!--<script type="text/javascript">app.initialize();</script> -->
+</div>
+</body>
+
+</html>
