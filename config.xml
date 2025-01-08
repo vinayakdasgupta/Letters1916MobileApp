@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.phonegap.letters1915" 
+         version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0"
+         xmlns:android   = "http://schemas.android.com/apk/res/android">
+    <name>The Letters of 1916</name>
+    <description>
+        This is a simple app that finds the 10 closest letters to you.
+    </description>
+    <author email="letters1916@gmail.com" href="http://letters1916.ie">
+        The letters of 1916
+    </author>
+    <content src="index.html" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="android-minSdkVersion" value="14" />
+
+    <plugin name="cordova-plugin-geolocation" spec="2.1.0" />
+    <plugin name="cordova-plugin-whitelist" spec="1.2.1" />
+    <plugin name="cordova-plugin-inappbrowser" source="npm" spec="&gt;1.0.0" />
+
+    <platform name="android">
+        <icon density="ldpi" src="res/icon/android/icon-36-ldpi.png" />
+        <icon density="mdpi" src="res/icon/android/icon-48-mdpi.png" />
+        <icon density="hdpi" src="res/icon/android/icon-72-hdpi.png" />
+        <icon density="xhdpi" src="res/icon/android/icon-96-xhdpi.png" />
+        <icon density="xxhdpi" src="res/icon/android/icon-144-xxhdpi.png" />
+        <icon density="xxxhdpi" src="res/icon/android/icon-192-xxxhdpi.png" />
+        <splash density="land-ldpi" src="res/screen/android/screen-ldpi-portrait.png" />
+        <splash density="land-mdpi" src="res/screen/android/screen-mdpi-portrait.png" />
+        <splash density="land-hdpi" src="res/screen/android/screen-hdpi-portrait.png" />
+        <splash density="land-xhdpi" src="res/screen/android/screen-xhdpi-portrait.png" />
+    </platform>
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <preference name="phonegap-version" value="cli-5.2.0" />
+    </platform>
+</widget>
